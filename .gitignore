@@ -4,6 +4,8 @@ __pycache__/
 *.pyo
 
 # Ignore virtual environments
+.env
+.venv
 venv/
 env/
 
@@ -13,4 +15,7 @@ env/
 
 # Ignore system files
 .DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
 

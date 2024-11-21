@@ -1,10 +1,12 @@
 import numpy as np
 
-def _build_transformation_matrix(unit_cell: np.ndarray) -> np.ndarray:
+def build_transformation_matrix(unit_cell: np.ndarray) -> np.ndarray:
     """
     Construct the transformation matrix to fractionalize the coordinates.
     
-    :param unit_cell: an array containing the unit cell parameters in the order: a, b, c, alpha, beta, gamma.
+    :param unit_cell: an array containing the unit cell parameters in the order: a, b, c, alpha, beta, gamma
+                      (lattice vectors in angstrom, angles in degree)
+                      
     :return: a 3x3 transformation matrix.
     """
 
@@ -30,20 +32,40 @@ def _build_transformation_matrix(unit_cell: np.ndarray) -> np.ndarray:
 
     return transformation_matrix
 
-def convert_to_fractional_coordinates(coord_atoms: np.ndarray, unit_cell: np.ndarray) -> np.ndarray:
+def convert_to_fractional_coordinates(cartesian_coords: np.ndarray, unit_cell: np.ndarray) -> np.ndarray:
     """
-    Convert an array of atomic coordinates to fractional coordinates.
+    Convert an array of atomic Cartesian coordinates to fractional coordinates.
 
-    :param coord_atoms: An array with lists of xyz coordinates in angstrom of the atoms as elements.
-    :param unit_cell: An array containing the unit cell parameters in the order: a, b, c, alpha, beta, gamma.
+    :param cartesian_coords: An array with lists of xyz coordinates in angstrom of the atoms as elements.
+    :param unit_cell: an array containing the unit cell parameters in the order: a, b, c, alpha, beta, gamma
+                      (lattice vectors in angstrom, angles in degree)
 
-    :return: An array with lists of fractional coordinates of the atoms as elements.
+    :return: A 2D array with the fractional coordinates.
     """
 
-    if not isinstance(coord_atoms, np.ndarray) or coord_atoms.ndim != 2 or coord_atoms.shape[1] != 3:
-        raise ValueError("coord_atoms must be a numpy array of shape (n, 3) where n is the number of atoms.")
+    if not isinstance(cartesian_coords, np.ndarray) or cartesian_coords.ndim != 2 or cartesian_coords.shape[1] != 3:
+        raise ValueError("Cartesian_coords must be a numpy array of shape (n, 3) where n is the number of atoms.")
 
-    transformation_matrix = _build_transformation_matrix(unit_cell)
-    fractional_coordinates = np.dot(coord_atoms, np.linalg.inv(transformation_matrix))
+    transformation_matrix = build_transformation_matrix(unit_cell)
+    fractional_coordinates = cartesian_coords @ np.linalg.inv(transformation_matrix).T
+
+    return fractional_coordinates
+
+def convert_to_cartesian_coordinates(fractional_coords: np.ndarray, unit_cell: np.ndarray) -> np.ndarray:
+    """
+    Convert an array of atomic fractional coordinates to Cartesian coordinates.
+
+    :param cartesian_coords: An array with lists of xyz coordinates in angstrom of the atoms as elements.
+    :param unit_cell: an array containing the unit cell parameters in the order: a, b, c, alpha, beta, gamma
+                      (lattice vectors in angstrom, angles in degree)
+
+    :return: A 2D array with the cartesian coordinates.
+    """
+
+    if not isinstance(fractional_coords, np.ndarray) or fractional_coords.ndim != 2 or fractional_coords.shape[1] != 3:
+        raise ValueError("fractional_coords must be a numpy array of shape (n, 3) where n is the number of atoms.")
+
+    transformation_matrix = build_transformation_matrix(unit_cell)
+    fractional_coordinates = fractional_coords @ transformation_matrix.T
 
     return fractional_coordinates
