@@ -12,6 +12,9 @@ def build_transformation_matrix(unit_cell: np.ndarray) -> np.ndarray:
 
     if not isinstance(unit_cell, np.ndarray) or unit_cell.shape != (6,):
         raise ValueError("unit_cell must be a numpy array of shape (6,)")
+    
+    if np.any(unit_cell == 0):
+        raise ValueError("Unit cell parameters must be non-zero.")
 
     # Define unit cell parameters with angles in radians
     a = unit_cell[0]
