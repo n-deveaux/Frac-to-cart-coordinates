@@ -11,8 +11,9 @@ sys.path.append(str(parent_directory))
 
 from Fractocart.main import convert_to_fractional_coordinates, convert_to_cartesian_coordinates
 
-#from test_arrays.dihydroazulene import unit_cell_DHA, cartesian_coordinates_DHA, fractional_coordinates_DHA
+from test_arrays.dihydroazulene import unit_cell_DHA, cartesian_coordinates_DHA, fractional_coordinates_DHA
 from test_arrays.anil import unit_cell_anil, cartesian_coordinates_anil, fractional_coordinates_anil
+from test_arrays.sio2 import unit_cell_sio2, cartesian_coordinates_sio2, fractional_coordinates_sio2
 
 
 class TestCoordinateConversion(unittest.TestCase):
@@ -28,19 +29,11 @@ class TestCoordinateConversion(unittest.TestCase):
         Initializes the unit cell, Cartesian coordinates, and expected fractional coordinates.
         """
 
-        # Example from Dihydroazulene
-        self.unit_cell_anil = unit_cell_anil
-        self.cartesian_coords_anil = cartesian_coordinates_anil
-        self.expected_fractional_coords_anil = fractional_coordinates_anil
-
-    def test_convert_to_fractional_coordinates(self):
-        """
-        Test the conversion from Cartesian coordinates to fractional coordinates.
-        Asserts that the result matches the expected fractional coordinates within a tolerance.
-        """
-
-        result = convert_to_fractional_coordinates(self.cartesian_coords_anil, self.unit_cell_anil)
-        np.testing.assert_almost_equal(result, self.expected_fractional_coords_anil, decimal=5)
+        self.examples = [
+            (fractional_coordinates_anil, unit_cell_anil, cartesian_coordinates_anil),
+            (fractional_coordinates_DHA, unit_cell_DHA, cartesian_coordinates_DHA),
+            (fractional_coordinates_sio2, unit_cell_sio2, cartesian_coordinates_sio2),
+        ]
 
     def test_convert_to_cartesian_coordinates(self):
         """
@@ -48,9 +41,21 @@ class TestCoordinateConversion(unittest.TestCase):
         Asserts that the result matches the original Cartesian coordinates within a tolerance.
         """
 
-        fractional_coords = self.expected_fractional_coords_anil
-        result = convert_to_cartesian_coordinates(fractional_coords, self.unit_cell_anil)
-        np.testing.assert_almost_equal(result, self.cartesian_coords_anil, decimal=5)
+        for fractional_coords, unit_cell, expected_cartesian_coords in self.examples:
+            result = convert_to_cartesian_coordinates(fractional_coords, unit_cell)
+            np.testing.assert_almost_equal(result, expected_cartesian_coords, decimal=5,
+                                        err_msg=f"Failed for {fractional_coords} with unit cell {unit_cell}")
+            
+    def test_convert_to_fractional_coordinates(self):
+        """
+        Test the conversion from Cartesian coordinates to fractional coordinates.
+        Asserts that the result matches the original fractional coordinates within a tolerance.
+        """
+
+        for expected_fractional_coords, unit_cell, cartesian_coords in self.examples:
+            result = convert_to_fractional_coordinates(cartesian_coords, unit_cell)
+            np.testing.assert_almost_equal(result, expected_fractional_coords, decimal=5,
+                                        err_msg=f"Failed for {cartesian_coords} with unit cell {unit_cell}")
 
     def test_invalid_cartesian_input(self):
         """
@@ -59,7 +64,7 @@ class TestCoordinateConversion(unittest.TestCase):
         """
 
         with self.assertRaises(ValueError):
-            convert_to_fractional_coordinates(np.array([[1.0, 2.0]]), self.unit_cell_anil)
+            convert_to_fractional_coordinates(np.array([[1.0, 2.0]]), unit_cell_anil)
 
     def test_invalid_fractional_input(self):
         """
@@ -68,7 +73,7 @@ class TestCoordinateConversion(unittest.TestCase):
         """
 
         with self.assertRaises(ValueError):
-            convert_to_cartesian_coordinates(np.array([[0.2, 0.4]]), self.unit_cell_anil)
+            convert_to_cartesian_coordinates(np.array([[0.2, 0.4]]), unit_cell_anil)
 
     def test_zero_param_unit_cell(self):
         """
@@ -78,4 +83,4 @@ class TestCoordinateConversion(unittest.TestCase):
 
         zero_unit_cell = np.array([0.0, 5.0, 5.0, 90.0, 90.0, 90.0])
         with self.assertRaises(ValueError):
-            convert_to_fractional_coordinates(self.cartesian_coords_anil, zero_unit_cell)
+            convert_to_fractional_coordinates(cartesian_coordinates_anil, zero_unit_cell)

@@ -1,5 +1,8 @@
 import numpy as np
 
+# Set NumPy print options to display with 6 decimal places and suppress scientific notation
+np.set_printoptions(precision=6)
+
 def build_transformation_matrix(unit_cell: np.ndarray) -> np.ndarray:
     """
     Construct the transformation matrix to fractionalize the coordinates.
@@ -31,7 +34,7 @@ def build_transformation_matrix(unit_cell: np.ndarray) -> np.ndarray:
         [a, b * np.cos(gamma), c * np.cos(beta)],
         [0, b * np.sin(gamma), -c * np.sin(beta) * cos_alpha_star],
         [0, 0, c * np.sin(beta) * sin_alpha_star]
-    ])
+    ], dtype=np.float64)
 
     return transformation_matrix
 
