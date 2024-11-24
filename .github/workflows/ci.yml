@@ -1,0 +1,29 @@
+name: Python Tests
+
+on:
+  push:             # Trigger the workflow on all branches
+    branches:
+      - '**'        # Run tests on any branch that receives a push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Use an Ubuntu environment for testing
+
+    steps:
+      # Step 1: Check out your code
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9  # Replace with your required Python version
+
+      # Step 3: Install dependencies if needed (Optional)
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip  # Only if you need extra dependencies
+
+      # Step 4: Run unittest
+      - name: Run tests
+        run: python -m unittest discover -s tests  # Run your unittests in the 'tests' folder
