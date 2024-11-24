@@ -1,6 +1,6 @@
 import numpy as np
 
-# Set NumPy print options to display with 6 decimal places and suppress scientific notation
+# Set NumPy print options to display with 6 decimal places.
 np.set_printoptions(precision=6)
 
 def build_transformation_matrix(unit_cell: np.ndarray) -> np.ndarray:
