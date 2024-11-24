@@ -21,6 +21,10 @@ class TestCoordinateConversion(unittest.TestCase):
     Unit tests for the coordinate conversion functions in the Fractocart module.
     This class tests the conversion between Cartesian and fractional coordinates,
     as well as handling of invalid inputs and edge cases.
+
+
+    To set the examples, the required precision was assesed by running single point energy and
+    static polarizability calculations on the test systems using the CRYSTAL23 code.
     """
 
     def setUp(self):
