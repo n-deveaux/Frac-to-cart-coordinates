@@ -19,3 +19,12 @@ env/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Latex auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.bbl
+*.blg
+acs-implementation_details.bib
