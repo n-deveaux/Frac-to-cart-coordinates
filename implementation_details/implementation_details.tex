@@ -1,0 +1,75 @@
+% !TeX spellcheck = en_US
+\documentclass[12pt,a4paper,oneside]{article}
+
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage[left=2.0cm,right=2.0cm,top=2.2cm,bottom=2.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[cyr]{aeguill}
+
+\usepackage{epsfig}
+
+\usepackage{amsmath,amsthm}
+\usepackage{amsfonts,amssymb}
+\usepackage{url}
+
+\usepackage[rightcaption]{sidecap}
+\usepackage{caption}
+
+\usepackage{array}
+
+\usepackage[articletitle = true, etalmode=truncate, maxauthors=10]{achemso}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=black,breaklinks=true,citecolor=blue]{hyperref} 
+
+%math gras en itallique
+\usepackage{bm}
+
+\begin{document}
+	 \begin{center}
+		\LARGE{\textbf{Frac-to-cart-coordinates implementation aspects}}\\
+		\vspace{1cm}
+	\end{center}
+
+\section*{Coordinate transformation in crystallography}
+In crystallography, atomic positions within a crystal's unit cell can be described using:
+\begin{itemize}
+	\item \textbf{Fractional coordinates} $(x/a, y/b, z/c)$, which refer to the natural axes \(a, b, c\), scaled by their respective unit cell lengths.
+	
+	\item \textbf{Orthogonal coordinates} $(X, Y, Z)$, which use a right-angled Cartesian system with distances measured in Ångstroms.
+	
+\end{itemize}
+For triclinic unit cells, the relationship between these coordinate systems involves a transformation matrix with non-trivial elements.
+
+\section*{Transformation matrix}
+This implementation follows the methodology described on Jon Cooper's website\cite{Cooper-site}. It relies on the fundamental principles of spherical trigonometry, allowing the cosine rule for reciprocal angles:
+\begin{equation}
+	\cos(\alpha^*) = \frac{\cos(\beta)\cos(\gamma) - \cos(\alpha)}{\sin(\beta)\sin(\gamma)}.
+\end{equation}
+Using this, the transformation matrix to convert Cartesian orthogonal coordinates $(X, Y, Z)$ to fractional ones $(x, y, z)$ aligning $a$ with the $X$-axis, is:	
+\begin{equation}
+	\begin{pmatrix}
+		X \\
+		Y \\
+		Z
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		a & b\cos(\gamma) & c\cos(\beta) \\
+		0 & b\sin(\gamma) & -c\sin(\beta)\cos(\alpha^*) \\
+		0 & 0 & c\sin(\beta)\sin(\alpha^*)
+	\end{pmatrix}
+	\begin{pmatrix}
+		x \\
+		y \\
+		z
+	\end{pmatrix}
+\end{equation}
+where $a, b, c$ are the unit cell lengths, $\alpha, \beta, \gamma$ are the angles of the unit cell (in radians), and $\alpha^*$ is the reciprocal angle, calculated using the cosine rule above.
+
+	\bibliography{implementation_details-refs}
+\end{document}
