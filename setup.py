@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='Frac-to-cart-coordinates', 
-    version='1.1.0',  
+    version='1.1.1',  
     author='Noah Deveaux',
     author_email='noah.deveaux@unamur.be',
     description='A lightweight Python package for converting between fractional and Cartesian coordinates, supporting both forward and inverse transformations.',
