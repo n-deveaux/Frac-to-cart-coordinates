@@ -13,12 +13,10 @@ For triclinic unit cells, the relationship between these coordinate systems invo
 This implementation follows the methodology described on Jon Cooper's website, [fractorth](https://ic50.org/fractorth/). It relies on the fundamental principles of spherical trigonometry (see [implementation_details](/implementation_details/implementation_details.pdf)).
 
 ## Installation
-
-You can clone the repository and install the package using:
+Run the following command in your terminal:
 
 ```bash
-git clone https://github.com/n-deveaux/Frac-to-cart-coordinates.git
-cd Frac-to-cart-coordinates
+pip install Frac-to-cart-coordinates
 ```
 
 Make sure you have numpy installed and Python 3.6 or higher.
