@@ -28,3 +28,8 @@ env/
 *.bbl
 *.blg
 acs-implementation_details.bib
+
+# PyPI build
+build/
+dist/
+*.egg-info/
