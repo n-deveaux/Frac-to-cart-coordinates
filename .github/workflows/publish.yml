@@ -28,4 +28,4 @@ jobs:
         TWINE_USERNAME: "__token__"  # Required for API tokens
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}  # Token stored in secrets
 
-      run: twine upload -- verbose dist/*
+      run: twine upload --verbose dist/*
